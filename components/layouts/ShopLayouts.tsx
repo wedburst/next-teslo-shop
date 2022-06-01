@@ -1,5 +1,6 @@
 import Head from "next/head";
 import { Navbar } from "../ui";
+import SideMenu from "../ui/SideMenu";
 
 interface Props {
   title: string;
@@ -34,6 +35,8 @@ export const ShopLayouts = ({
           {/* Navbar */}
           <Navbar/>
       </nav>
+
+      <SideMenu />
 
       <main style={{
           margin: '80px auto',
