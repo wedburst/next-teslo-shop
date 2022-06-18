@@ -6,7 +6,3 @@ services:
       - 27014:27017
     volumes:
       - ./mongo:/data/db
-
-# - 27017:27018
-#  el de la izquierda es el puerto de mongo por default
-#  el de la derecha es el puerto del contenedor de docker
