@@ -5,9 +5,9 @@ import type { NextApiRequest, NextApiResponse } from 'next'
 
 type Data =
 | { message: string }
-| IProduct[]
+| IProduct
 
-export default function hanldlre(req: NextApiRequest, res: NextApiResponse<Data>) {
+export default function hanldler(req: NextApiRequest, res: NextApiResponse<Data>) {
     switch( req.method ){
         case 'GET':
             return getProductBySlug(req, res)
@@ -19,13 +19,20 @@ export default function hanldlre(req: NextApiRequest, res: NextApiResponse<Data>
 
 async function getProductBySlug(req: NextApiRequest, res: NextApiResponse<Data>) {
     await db.connect();
+
+    const { slug } = req.query;
     
-    const products = await Product
-        .find()
-        .select('slug -_id')
+    const product = await Product
+        .findOne({ slug })
         .lean();
 
     await db.disconnect();
 
-    return res.status(200).json(products);
+    if ( !product ) {
+        return res.status(404).json({
+            message: 'Product not found',
+        });
+    }
+
+    return res.json(product);
 }
