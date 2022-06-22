@@ -11,7 +11,7 @@ import {
 } from "@mui/material";
 import { Box } from "@mui/system";
 
-const addressPage = () => {
+const AddressPage = () => {
   return (
     <ShopLayouts title={""} pageDescription={""}>
       <Typography variant="h1" component="h1">
@@ -66,4 +66,4 @@ const addressPage = () => {
   );
 };
 
-export default addressPage;
+export default AddressPage;
