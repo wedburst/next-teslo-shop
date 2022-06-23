@@ -5,7 +5,7 @@ import { FullScreenLoading } from 'components/ui';
 import { useProducts } from 'hooks';
 
 const KidPage = () => {
-  const {products, isLoading} = useProducts('/products?gender=women');
+  const {products, isLoading} = useProducts('/products?gender=kid');
 
   return (
     <ShopLayouts title={'Tesla-Shop - Kid'} pageDescription={'Los mejores productos de niños'}>
