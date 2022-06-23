@@ -36,7 +36,7 @@ export const ProductCard = ({ product }: Props) => {
       onMouseLeave={() => setIsHovered(false)}
     >
       <Card>
-        <NextLink href="/product/slug" passHref prefetch={false}>
+        <NextLink href={`/product/${product.slug}`} passHref prefetch={false}>
           {/* as={`/products/${product.slug}`} */}
           <Link>
             <CardActionArea>
