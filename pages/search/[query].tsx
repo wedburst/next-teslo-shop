@@ -7,14 +7,14 @@ import { ProductList } from 'components/products'
 import { initialData } from 'database/products'
 
 
-const HomePage: NextPage = () => {
+const SearchPage: NextPage = () => {
   
   const {products, isLoading} = useProducts('/products');
  
   return (
-    <ShopLayouts title={'Tesla-Shop - Home'} pageDescription={'Los mejores productos de Teslo'}>
-      <Typography variant="h1" component="h1">Tienda</Typography>
-      <Typography variant="h2" sx={{ mb: 1 }}>Todos los productos</Typography>
+    <ShopLayouts title={'Tesla-Shop - Search'} pageDescription={'Los mejores productos de Teslo'}>
+      <Typography variant="h1" component="h1">Buscar productos</Typography>
+      <Typography variant="h2" sx={{ mb: 1 }}>abc</Typography>
 
       {
         isLoading
@@ -25,4 +25,4 @@ const HomePage: NextPage = () => {
   )
 }
 
-export default HomePage
+export default SearchPage
