@@ -1,5 +1,5 @@
 import { Box, Button, Chip, Grid, Typography } from '@mui/material';
-import { dbProdcuts } from 'database';
+import { dbProducts } from 'database';
 import { NextPage, GetServerSideProps, GetStaticPaths, GetStaticProps } from 'next';
 import { ShopLayouts } from '../../components/layouts'
 import { ProductSlideShow, SizeSelector } from '../../components/products';
@@ -71,7 +71,7 @@ const ProductPage:NextPage<Props> = ({ product }) => {
 // export const getServerSideProps: GetServerSideProps = async ({params}) => {
 // console.log(params)
 //   const  { slug = '' } = params as {slug:string};
-//   const product = await dbProdcuts.getProductsBySlug(slug)
+//   const product = await dbProducts.getProductsBySlug(slug)
 
 //   if ( !product ){
 //     return {
@@ -95,7 +95,7 @@ const ProductPage:NextPage<Props> = ({ product }) => {
 
 export const getStaticPaths: GetStaticPaths = async (ctx) => {
 
-  const productSlugs = await dbProdcuts.getAllProductSlugs();
+  const productSlugs = await dbProducts.getAllProductSlugs();
 
   return {
     paths: productSlugs.map(({slug}) => ({
@@ -119,7 +119,7 @@ export const getStaticPaths: GetStaticPaths = async (ctx) => {
 export const getStaticProps: GetStaticProps = async ({params}) => {
 
   const { slug = ''} = params as { slug: string};
-  const product = await dbProdcuts.getProductsBySlug(slug);
+  const product = await dbProducts.getProductsBySlug(slug);
 
   if( !product ) {
     return {
