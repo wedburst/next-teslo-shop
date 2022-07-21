@@ -1,15 +1,16 @@
-import { Box, Button, Chip, Grid, Typography } from "@mui/material";
-import { dbProducts } from "database";
+import { useState } from "react";
 import {
   NextPage,
   GetServerSideProps,
   GetStaticPaths,
   GetStaticProps,
 } from "next";
+import { Box, Button, Chip, Grid, Typography } from "@mui/material";
 import { ShopLayouts } from "../../components/layouts";
+import { dbProducts } from "database";
 import { ProductSlideShow, SizeSelector } from "../../components/products";
 import { ItemCounter } from "../../components/ui";
-import { IProduct } from "../../interfaces";
+import { ICartProduct, IProduct, ISize } from "../../interfaces";
 
 // const product = initialData.products[0];
 
@@ -25,6 +26,29 @@ const ProductPage: NextPage<Props> = ({ product }) => {
 
   // if( isLoading ) return <h1>Cargando</h1>
   // if( !product ) return <h1>No Existe</h1>
+
+  const [temCartProduct, setTemCartProduct] = useState<ICartProduct>({
+    _id: product._id,
+    image: product.images[0],
+    price: product.price,
+    size: undefined,
+    slug: product.slug,
+    title: product.title,
+    gender: product.gender,
+    quantity: 1,
+  })
+  
+  const selectedSize = (size: ISize) => {
+    setTemCartProduct( currentProduct => (
+      {
+        ...currentProduct,
+        size
+    }))
+    // setTemCartProduct({
+    //   ...temCartProduct,
+    //   size: size
+    // })
+  }
 
   return (
     <ShopLayouts title={product.title} pageDescription={product.description}>
@@ -55,13 +79,20 @@ const ProductPage: NextPage<Props> = ({ product }) => {
               <SizeSelector
                 // selectedSize={ product.sizes[0] }
                 sizes={product.sizes}
+                selectedSize={ temCartProduct.size }
+                onSelectedSize={selectedSize}
               />
             </Box>
 
             {/* Agregar al carrito */}
             {product.inStock > 0 ? (
               <Button color="secondary" className="circular-btn">
-                Agregar al carrito
+                {
+                  temCartProduct.size 
+                    ? 'Agregar al carrito'
+                    : 'Seleccione una talla'
+                }
+                
               </Button>
             ) : (
               <Chip
