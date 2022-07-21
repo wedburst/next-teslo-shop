@@ -6,6 +6,7 @@ import {
   Card,
   CardActionArea,
   CardMedia,
+  Chip,
   Grid,
   Link,
   Typography,
@@ -40,6 +41,15 @@ export const ProductCard = ({ product }: Props) => {
           {/* as={`/products/${product.slug}`} */}
           <Link>
             <CardActionArea>
+              {
+                (product.inStock === 0) && (
+                  <Chip
+                    color="primary"
+                    label="No hay disponible"
+                    sx={{ position: "absolute", zIndex: 2, top: 10, left: 10 }}
+                  />
+                )
+              }
               <CardMedia
                 className="fadeIn"
                 component="img"
@@ -52,7 +62,10 @@ export const ProductCard = ({ product }: Props) => {
         </NextLink>
       </Card>
 
-      <Box sx={{ mt: 1, display: isImageLoader ? 'block' : 'none' }} className="fadeIn">
+      <Box
+        sx={{ mt: 1, display: isImageLoader ? "block" : "none" }}
+        className="fadeIn"
+      >
         <Typography fontWeight={700}>{product.title}</Typography>
         <Typography fontWeight={500}>{`$${product.price}`}</Typography>
       </Box>
