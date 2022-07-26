@@ -10,9 +10,9 @@ const UI_INITIALSTATE: UiState = {
 };
 
 export const UiProvider = ({ children }: any) => {
-  const [state, dispath] = useReducer(uiReducer, UI_INITIALSTATE);
+  const [state, dispatch] = useReducer(uiReducer, UI_INITIALSTATE);
 
-  const toggleSideMenu = () => dispath({ type: "[UI] - ToggleMenu" });
+  const toggleSideMenu = () => dispatch({ type: "[UI] - ToggleMenu" });
 
   return (
     <UiContext.Provider

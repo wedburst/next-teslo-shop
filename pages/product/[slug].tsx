@@ -1,10 +1,12 @@
-import { useState } from "react";
+import { useState, useContext } from 'react';
+import { useRouter } from "next/router";
 import {
   NextPage,
   GetServerSideProps,
   GetStaticPaths,
   GetStaticProps,
 } from "next";
+import { CartContext } from '../../context/cart/CartContext';
 import { Box, Button, Chip, Grid, Typography } from "@mui/material";
 import { ShopLayouts } from "../../components/layouts";
 import { dbProducts } from "database";
@@ -19,7 +21,8 @@ interface Props {
 }
 
 const ProductPage: NextPage<Props> = ({ product }) => {
-  // const router = useRouter();
+  const router = useRouter();
+  const { addProductToCart } = useContext( CartContext );
   // const { products: product, isLoading } = useProducts(`/products/${router.query.slug}`);
 
   // console.log({product})
@@ -59,7 +62,10 @@ const ProductPage: NextPage<Props> = ({ product }) => {
   }
 
   const onAddProduct  = () => {
-    console.log({temCartProduct})
+    if ( !temCartProduct.size ) return;
+
+    addProductToCart(temCartProduct);
+    router.push("/cart")
   }
 
   return (
