@@ -1,4 +1,6 @@
+import { useContext } from "react";
 import NextLink from "next/link";
+import { CartContext } from "context";
 import {
   Box,
   Button,
@@ -23,17 +25,27 @@ interface Props {
 }
 
 export const CartList = ({ editable }: Props) => {
+  const { cart } = useContext(CartContext);
+
+  const onUpdateQuantity = (quantity: number) => {
+    // setTemCartProduct( currentProduct => (
+    //   {
+    //     ...currentProduct,
+    //     quantity
+    // }))
+  }
+
   return (
     <>
-      {productsIncart.map((product) => (
-        <Grid container spacing={2} key={product.slug} sx={{ mb: 1 }}>
+      {cart.map((product) => (
+        <Grid container spacing={2} key={product.slug + product.size} sx={{ mb: 1 }}>
           <Grid item xs={3}>
             {/* TODO: llevar a la página del producto */}
-            <NextLink href="/product/slug" passHref>
+            <NextLink href={ `/product/${product.slug}` } passHref>
               <Link>
                 <CardActionArea>
                   <CardMedia
-                    image={`/products/${product.images[0]}`}
+                    image={`/products/${product.image}`}
                     component="img"
                     sx={{ borderRadius: "5px" }}
                   />
@@ -45,11 +57,15 @@ export const CartList = ({ editable }: Props) => {
             <Box display="flex" flexDirection="column">
               <Typography variant="body1">{product.title}</Typography>
               <Typography variant="body1">
-                Talla: <strong>M</strong>
+                Talla: <strong>{product.size}</strong>
               </Typography>
 
               {/* Condicional */}
-              {editable ? <ItemCounter /> : <Typography>3 items</Typography>}
+              {editable ? (
+                <ItemCounter currentValue={product.quantity} maxvalue={15} updateQuantity={onUpdateQuantity} />
+              ) : (
+                <Typography>{product.quantity} {product.quantity > 1 ? "productos" : "producto"}</Typography>
+              )}
             </Box>
           </Grid>
           <Grid
