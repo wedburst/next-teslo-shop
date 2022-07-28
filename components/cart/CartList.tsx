@@ -1,4 +1,4 @@
-import { useContext } from "react";
+import { Fragment, useContext, useId } from "react";
 import NextLink from "next/link";
 import { CartContext } from "context";
 import {
@@ -12,6 +12,7 @@ import {
 } from "@mui/material";
 import { initialData } from "../../database/products";
 import { ItemCounter } from "../ui";
+import { ICartProduct } from "interfaces";
 
 const productsIncart = [
   initialData.products[0],
@@ -25,20 +26,21 @@ interface Props {
 }
 
 export const CartList = ({ editable }: Props) => {
-  const { cart } = useContext(CartContext);
+  const { cart, updateCartQuantity, removeCartProduct } =
+    useContext(CartContext);
 
-  const onUpdateQuantity = (quantity: number) => {
-    // setTemCartProduct( currentProduct => (
-    //   {
-    //     ...currentProduct,
-    //     quantity
-    // }))
-  }
+  const onUpdateNewQuantity = (
+    product: ICartProduct,
+    newQuantityValue: number
+  ) => {
+    product.quantity = newQuantityValue;
+    updateCartQuantity(product);
+  };
 
   return (
     <>
       {cart.map((product) => (
-        <Grid container spacing={2} key={product.slug + product.size} sx={{ mb: 1 }}>
+        <Grid container spacing={2} key={product._id + product.size} sx={{ mb: 1 }}>
           <Grid item xs={3}>
             {/* TODO: llevar a la página del producto */}
             <NextLink href={ `/product/${product.slug}` } passHref>
@@ -62,7 +64,7 @@ export const CartList = ({ editable }: Props) => {
 
               {/* Condicional */}
               {editable ? (
-                <ItemCounter currentValue={product.quantity} maxvalue={15} updateQuantity={onUpdateQuantity} />
+                <ItemCounter currentValue={product.quantity} maxvalue={15} updateQuantity={(value) => onUpdateNewQuantity(product, value)} />
               ) : (
                 <Typography>{product.quantity} {product.quantity > 1 ? "productos" : "producto"}</Typography>
               )}
@@ -78,7 +80,7 @@ export const CartList = ({ editable }: Props) => {
             <Typography variant="subtitle1">{`$${product.price}`}</Typography>
             {/* Editable */}
             {editable && (
-              <Button variant="text" color="secondary">
+              <Button variant="text" color="secondary" onClick={() => removeCartProduct(product)}>
                 Remover
               </Button>
             )}

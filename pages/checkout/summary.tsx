@@ -1,8 +1,14 @@
 import NextLink from "next/link";
+import dynamic from 'next/dynamic'
 import { Box, Button, Card, CardContent, Divider, Grid, Link, Typography } from "@mui/material";
 
 import { ShopLayouts } from "../../components/layouts/ShopLayouts";
-import { CartList, OrderSummary } from "../../components/cart";
+
+import { OrderSummary } from "../../components/cart";
+
+const CartList = dynamic(() => import("../../components/cart").then(i => i.CartList), {
+    ssr: false,
+  });
 
 const SummaryPage = () => {
   return (

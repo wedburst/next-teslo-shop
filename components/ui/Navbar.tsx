@@ -2,6 +2,7 @@ import { useContext, useState } from "react";
 import NextLink from "next/link";
 import { useRouter } from "next/router";
 
+import { CartContext } from "../../context/cart/CartContext";
 import { UiContext } from "context";
 
 import {
@@ -31,6 +32,7 @@ export const Navbar = () => {
   const activeLink = (href: string) => (href === asPath ? "primary" : "info");
 
   const { toggleSideMenu } = useContext(UiContext);
+  const { numberOfItems } = useContext(CartContext);
   // Reutilizar
   const [searchTerm, setSearchTerm] = useState("");
   const [isSearchVisible, setIsSearchVisible] = useState(false);
@@ -38,12 +40,12 @@ export const Navbar = () => {
   const onSearchTerm = () => {
     if (searchTerm.trim().length === 0) return;
 
-    push(`/search/${ searchTerm }`);
+    push(`/search/${searchTerm}`);
   };
 
   const handleClear = () => {
     setSearchTerm("");
-  }
+  };
 
   return (
     <AppBar>
@@ -59,8 +61,12 @@ export const Navbar = () => {
 
         <Box flex={1} />
 
-        <Box sx={{ display: isSearchVisible ? 'none' : { xs: "none", sm: "block" } }}
-        className="fadeIn">
+        <Box
+          sx={{
+            display: isSearchVisible ? "none" : { xs: "none", sm: "block" },
+          }}
+          className="fadeIn"
+        >
           <NextLink href="/category/men" passHref>
             <Link>
               <Button color={activeLink("/category/men")}>Hombres</Button>
@@ -82,38 +88,33 @@ export const Navbar = () => {
 
         {/* Pantallas grandes */}
 
-        {
-          isSearchVisible
-            ? (
-              <Input
-              sx={{ display: { xs: "none", sm: "flex" } }}
-                className="fadeIn"
-                autoFocus
-                value={searchTerm}
-                onChange={({ target }) => setSearchTerm(target.value)}
-                onKeyPress={(e) => (e.key === "Enter" ? onSearchTerm() : null)}
-                type="text"
-                placeholder="Buscar..."
-                endAdornment={
-                  <InputAdornment position="end">
-                    <IconButton onClick={() => setIsSearchVisible(false)}>
-                      <ClearOutlined onClick={handleClear}/>
-                    </IconButton>
-                  </InputAdornment>
-                }
-              />
-            )
-            :
-            (
-              <IconButton 
-                className="fadeIn"
-                onClick={() => setIsSearchVisible(true)}
-                sx={{ display: { xs: "none", sm: "flex" } }}
-              >
-              <SearchOutlinedIcon />
-            </IconButton>
-            )
-        }
+        {isSearchVisible ? (
+          <Input
+            sx={{ display: { xs: "none", sm: "flex" } }}
+            className="fadeIn"
+            autoFocus
+            value={searchTerm}
+            onChange={({ target }) => setSearchTerm(target.value)}
+            onKeyPress={(e) => (e.key === "Enter" ? onSearchTerm() : null)}
+            type="text"
+            placeholder="Buscar..."
+            endAdornment={
+              <InputAdornment position="end">
+                <IconButton onClick={() => setIsSearchVisible(false)}>
+                  <ClearOutlined onClick={handleClear} />
+                </IconButton>
+              </InputAdornment>
+            }
+          />
+        ) : (
+          <IconButton
+            className="fadeIn"
+            onClick={() => setIsSearchVisible(true)}
+            sx={{ display: { xs: "none", sm: "flex" } }}
+          >
+            <SearchOutlinedIcon />
+          </IconButton>
+        )}
 
         {/* Pantallas pequeñas */}
         <IconButton
@@ -126,7 +127,7 @@ export const Navbar = () => {
         <NextLink href="/cart" passHref>
           <Link>
             <IconButton>
-              <Badge badgeContent={4} color="secondary">
+              <Badge badgeContent={numberOfItems} max={9} color="secondary">
                 <ShoppingCartOutlined />
               </Badge>
             </IconButton>

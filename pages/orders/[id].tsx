@@ -12,11 +12,16 @@ import {
 } from "@mui/material";
 
 import { ShopLayouts } from "../../components/layouts/ShopLayouts";
-import { CartList, OrderSummary } from "../../components/cart";
+import { OrderSummary } from "../../components/cart";
+const CartList = dynamic(() => import("../../components/cart").then(i => i.CartList), {
+  ssr: false,
+});
+
 import {
   CreditCardOffOutlined,
   CreditScoreOutlined,
 } from "@mui/icons-material";
+import dynamic from "next/dynamic";
 
 const OrderPage = () => {
   return (
