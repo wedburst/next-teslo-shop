@@ -4,7 +4,7 @@ import { useProducts } from 'hooks'
 import type { NextPage } from 'next'
 import { ShopLayouts } from 'components/layouts'
 import { ProductList } from 'components/products'
-import { initialData } from 'database/products'
+import { initialData } from 'database/seed-data'
 
 
 const HomePage: NextPage = () => {

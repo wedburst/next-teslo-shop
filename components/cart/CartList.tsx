@@ -10,7 +10,7 @@ import {
   Link,
   Typography,
 } from "@mui/material";
-import { initialData } from "../../database/products";
+import { initialData } from "../../database/seed-data";
 import { ItemCounter } from "../ui";
 import { ICartProduct } from "interfaces";
 
