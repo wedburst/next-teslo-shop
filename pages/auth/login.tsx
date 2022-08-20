@@ -1,10 +1,19 @@
+import { useState } from "react";
 import NextLink from "next/link";
 import { useForm } from "react-hook-form";
 
-import { Box, Button, Chip, Grid, Link, TextField, Typography } from "@mui/material";
+import {
+  Box,
+  Button,
+  Chip,
+  Grid,
+  Link,
+  TextField,
+  Typography,
+} from "@mui/material";
 import { AuthLayout } from "components/layouts";
 import { validations } from "utils";
-import tesloApi from '../../api/tesloApi';
+import tesloApi from "../../api/tesloApi";
 import { ErrorOutline } from "@mui/icons-material";
 
 type FormData = {
@@ -19,16 +28,19 @@ const loginPage = () => {
     formState: { errors },
   } = useForm<FormData>();
 
-  const onLoginUser = async( {email, password}: FormData ) => {
-    
+  const [showError, setShowError] = useState(false);
+
+  const onLoginUser = async ({ email, password }: FormData) => {
     try {
-      const { data } = await tesloApi.post('/user/login', {email, password});
+      setShowError(false);
+      const { data } = await tesloApi.post("/user/login", { email, password });
 
       const { token, user } = data;
-      console.log({ token, user});
-      
+      console.log({ token, user });
     } catch (error) {
-      console.log('Error en las credenciales')
+      setShowError(true);
+      setTimeout(() => setShowError(false), 3000)
+      console.log("Error en las credenciales");
     }
   };
 
@@ -46,6 +58,7 @@ const loginPage = () => {
                 color="error"
                 icon={<ErrorOutline />}
                 className="fadeIn"
+                sx={{display: showError ? 'flex' : 'none'}}
               />
             </Grid>
             <Grid item xs={12}>
@@ -55,7 +68,7 @@ const loginPage = () => {
                 fullWidth
                 {...register("email", {
                   required: "Este campo es requerido",
-                  validate: (val) => validations.isEmail(val)
+                  validate: (val) => validations.isEmail(val),
                 })}
                 error={!!errors.email}
                 helperText={errors.email?.message}
@@ -69,7 +82,7 @@ const loginPage = () => {
                 fullWidth
                 {...register("password", {
                   required: "Este campo es requerido",
-                  minLength: { value: 5, message: "Mínimo 6 caracteres" },
+                  minLength: { value: 5, message: "Mínimo 5 caracteres" },
                 })}
                 error={!!errors.password}
                 helperText={errors.password?.message}
