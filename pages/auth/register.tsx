@@ -1,5 +1,6 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import NextLink from "next/link";
+import { useRouter } from "next/router";
 import {
   Box,
   Grid,
@@ -14,6 +15,7 @@ import { useForm } from "react-hook-form";
 import { CheckCircleOutline, ErrorOutline } from "@mui/icons-material";
 import { validations } from "utils";
 import tesloApi from "../../api/tesloApi";
+import { AuthContext } from "context";
 
 type FormData = {
   name: string;
@@ -22,8 +24,12 @@ type FormData = {
 };
 
 const registerPage = () => {
+  let router = useRouter();
+  const { registerUser } = useContext(AuthContext);
+
   const [showError, setShowError] = useState(false);
   const [showSucces, setShowSucces] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
 
   const {
     register,
@@ -33,24 +39,39 @@ const registerPage = () => {
   } = useForm<FormData>();
 
   const onRegisterForm = async ({ name, email, password }: FormData) => {
-    try {
-      setShowError(false);
-      const { data } = await tesloApi.post("/user/register", {
-        name,
-        email,
-        password,
-      });
-      const { token, user } = data;
-      console.log({ token, user });
-      reset();
-      setShowSucces(true);
-      setTimeout(() => setShowSucces(false), 3000);
-    } catch (error) {
+    setShowError(false);
+    
+    const {hasError, message} = await registerUser(name, email, password);
+    
+    if ( hasError ){
       setShowError(true);
       setShowSucces(false);
+      setErrorMessage( message! ) // message! es la alternativa de message || ''
       setTimeout(() => setShowError(false), 3000);
-      console.log("Error en las credenciales");
+      console.log("Error en las credenciales", errorMessage);
+      return;
     }
+    reset();
+    setShowSucces(true);
+    setTimeout(() => setShowSucces(false), 3000);
+
+    // try {
+    //   const { data } = await tesloApi.post("/user/register", {
+    //     name,
+    //     email,
+    //     password,
+    //   });
+    //   const { token, user } = data;
+    //   console.log({ token, user });
+    //   reset();
+    //   setShowSucces(true);
+    //   setTimeout(() => setShowSucces(false), 3000);
+    // } catch (error) {
+    //   setShowError(true);
+    //   setShowSucces(false);
+    //   setTimeout(() => setShowError(false), 3000);
+    //   console.log("Error en las credenciales");
+    // }
   };
   return (
     <AuthLayout title={"Registro"}>
