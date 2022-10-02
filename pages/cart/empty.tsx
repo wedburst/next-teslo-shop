@@ -9,9 +9,12 @@ import KeyboardBackspaceIcon from "@mui/icons-material/KeyboardBackspace";
 const emptyPage = () => {
   return (
     <ShopLayouts
-      title="Carrito vacío"
-      pageDescription="No hay productos en el carrito de compra"
+      title={`Carrito - vacío`}
+      pageDescription="Carrito de compras"
     >
+      <Typography variant="h1" component="h1">
+        Carrito de compras
+      </Typography>
       <Box
         display="flex"
         justifyContent="center"
@@ -19,11 +22,26 @@ const emptyPage = () => {
         height="calc(100vh - 200px)"
         sx={{ flexDirection: { xs: "column", md: "row" } }}
       >
-        <RemoveShoppingCartIcon sx={{ fontSize: 60 }} />
-        <Box display="flex" flexDirection="column" marginLeft={2}>
-          <Typography variant="h5">Carrito vacío</Typography>
+        <Box
+          display="flex"
+          justifyContent="center"
+          alignItems="center"
+          flexDirection="column"
+        >
+          <RemoveShoppingCartIcon sx={{ fontSize: 80 }} />
+          <Box marginTop={3} textAlign="center">
+            <Typography variant="h4">Carrito vacío</Typography>
+            <Typography>
+              Tenemos ofertas y oportunidades únicas, ¿te las vas a perder?
+            </Typography>
+          </Box>
           <NextLink href="/" passHref>
-            <Link color="secondary" display="flex" alignItems="center">
+            <Link
+              color="secondary"
+              marginTop={3}
+              display="flex"
+              alignItems="center"
+            >
               <KeyboardBackspaceIcon />
               <Typography marginLeft={1}>Regresar</Typography>
             </Link>

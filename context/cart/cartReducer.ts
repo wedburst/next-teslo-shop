@@ -28,6 +28,7 @@ export const cartReducer = (
       return {
         ...state,
         cart: [...action.payload],
+        isLoaded: true,
       };
 
     case "[Cart] - Update products in cart":

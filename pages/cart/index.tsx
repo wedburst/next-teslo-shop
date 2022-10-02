@@ -1,4 +1,4 @@
-import { useContext } from "react";
+import { useEffect, useContext } from "react";
 import NextLink from "next/link";
 import { useRouter } from "next/router";
 import dynamic from "next/dynamic";
@@ -29,9 +29,18 @@ const CartList = dynamic(
 );
 
 const CartPage = () => {
-  const { numberOfItems } = useContext(CartContext);
-  const emptyPage = useRouter();
+  const { numberOfItems, isLoaded , cart} = useContext(CartContext);
+  const router = useRouter();
 
+  useEffect(() => {
+    if (isLoaded && cart.length === 0) {
+      router.replace('cart/empty')
+    }
+  }, [isLoaded, cart, router]);
+
+   if (!isLoaded || cart.length === 0) {
+    return <></>
+   }
   function CartListRender() {
     if (numberOfItems < 1) {
       return (
@@ -91,7 +100,7 @@ const CartPage = () => {
                 <OrderSummary />
 
                 <Box sx={{ mt: 3 }}>
-                  <Button color="secondary" className="circular-btn" fullWidth>
+                  <Button color="secondary" className="circular-btn" fullWidth href='/checkout/address'>
                     Checkout
                   </Button>
                 </Box>

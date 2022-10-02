@@ -29,7 +29,7 @@ const registerPage = () => {
 
   const [showError, setShowError] = useState(false);
   const [showSucces, setShowSucces] = useState(false);
-  const [errorMessage, setErrorMessage] = useState('');
+  const [errorMessage, setErrorMessage] = useState("");
 
   const {
     register,
@@ -40,13 +40,13 @@ const registerPage = () => {
 
   const onRegisterForm = async ({ name, email, password }: FormData) => {
     setShowError(false);
-    
-    const {hasError, message} = await registerUser(name, email, password);
-    
-    if ( hasError ){
+
+    const { hasError, message } = await registerUser(name, email, password);
+
+    if (hasError) {
       setShowError(true);
       setShowSucces(false);
-      setErrorMessage( message! ) // message! es la alternativa de message || ''
+      setErrorMessage(message!); // message! es la alternativa de message || ''
       setTimeout(() => setShowError(false), 3000);
       console.log("Error en las credenciales", errorMessage);
       return;
@@ -54,6 +54,11 @@ const registerPage = () => {
     reset();
     setShowSucces(true);
     setTimeout(() => setShowSucces(false), 3000);
+
+
+    const destination = router.query.p?.toString() || '/'
+
+    router.replace(destination);
 
     // try {
     //   const { data } = await tesloApi.post("/user/register", {
@@ -153,7 +158,14 @@ const registerPage = () => {
             </Grid>
 
             <Grid item xs={12} display="flex" justifyContent="end">
-              <NextLink href="/auth/login" passHref>
+              <NextLink
+                href={
+                  router.query.p
+                    ? `/auth/login?p${router.query.p}`
+                    : `/auth/login`
+                }
+                passHref
+              >
                 <Link underline="always">¿Ya tienes una cuenta?</Link>
               </NextLink>
             </Grid>

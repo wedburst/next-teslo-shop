@@ -1,3 +1,5 @@
+import { GetServerSideProps } from 'next'
+import { jwt } from "utils";
 import { ShopLayouts } from "components/layouts";
 import {
   Button,
@@ -65,5 +67,38 @@ const AddressPage = () => {
     </ShopLayouts>
   );
 };
+
+// You should use getServerSideProps when:
+// - Only if you need to pre-render a page whose data must be fetched at request time
+// Versiones inferior a la 12
+
+// export const getServerSideProps: GetServerSideProps = async ({req}) => {
+
+//   const { token = '' } = req.cookies;
+//   let isValidToken = false;
+
+//   try {
+//    await jwt.isValidToken( token ); 
+//    isValidToken = true;
+//   }catch (error) {
+//     console.log(error)
+//    isValidToken = false;
+//   }
+
+//   if ( !isValidToken ) {
+//     return {
+//       redirect: {
+//         destination: '/auth/login?p=/checkout/address',
+//         permanent: false,
+//       }
+//     }
+//   }
+
+//   return {
+//     props: {
+      
+//     }
+//   }
+// }
 
 export default AddressPage;
