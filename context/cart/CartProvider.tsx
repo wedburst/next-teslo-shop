@@ -11,7 +11,20 @@ export interface CartState {
   subTotal: number;
   tax: number;
   total: number;
+
+  shippingAddress?: ShippingAddress;
 }
+
+export interface ShippingAddress {
+  firstName: string;
+  lastName : string;
+  address  : string;
+  address2?: string;
+  zip      : string;
+  city     : string;
+  country  : string;
+  phone    : string;
+};
 
 const CART_INITIALSTATE: CartState = {
   //   cart: [],
@@ -21,6 +34,7 @@ const CART_INITIALSTATE: CartState = {
   subTotal: 0,
   tax: 0,
   total: 0,
+  shippingAddress: undefined,
 };
 
 export const CartProvider: FC = ({ children }: any) => {
@@ -43,6 +57,29 @@ export const CartProvider: FC = ({ children }: any) => {
       });
     }
   }, []);
+
+  useEffect(() => {
+
+    if (Cookie.get("firstName")) {
+      const cookiesAddress = {
+        firstName: Cookie.get("firstName") || "",
+        lastName: Cookie.get("lastName") || "",
+        address: Cookie.get("address") || "",
+        address2: Cookie.get("address2") || "",
+        zip: Cookie.get("zip") || "",
+        city: Cookie.get("city") || "",
+        country: Cookie.get("country") || "",
+        phone: Cookie.get("phone") || "",
+      }
+  
+      dispatch({
+        type: "[Cart] - LoadAdrees from cookies",
+        payload: cookiesAddress,
+      });
+    }
+ 
+  }, [])
+  
 
   useEffect(() => {
     Cookie.set("cart", JSON.stringify(state.cart));
