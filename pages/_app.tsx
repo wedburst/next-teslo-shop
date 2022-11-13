@@ -1,4 +1,6 @@
 import type { AppProps } from "next/app";
+import { SessionProvider } from "next-auth/react"
+
 import { CssBaseline, ThemeProvider } from "@mui/material";
 import { SWRConfig } from "swr";
 
@@ -9,6 +11,7 @@ import { AuthProvider, CartProvider, UiProvider } from "context";
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (
+    <SessionProvider >
     <SWRConfig
       value={{
         // refreshInterval: 300,
@@ -27,6 +30,8 @@ function MyApp({ Component, pageProps }: AppProps) {
         </CartProvider>
       </AuthProvider>
     </SWRConfig>
+
+    </SessionProvider>
   );
 }
 

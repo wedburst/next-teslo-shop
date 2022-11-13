@@ -1,5 +1,6 @@
 import React, { FC, useReducer, useEffect } from "react";
 import { tesloApi } from "api";
+import { useSession, signIn, signOut } from "next-auth/react";
 import { useRouter } from "next/router";
 import axios from "axios";
 import { IUser } from "interfaces";
@@ -19,10 +20,18 @@ const AUTH_INITIALSTATE: AuthState = {
 export const AuthProvider: FC = ({ children }: any) => {
   const [state, dispath] = useReducer(authReducer, AUTH_INITIALSTATE);
   const router = useRouter();
+  const { data,  status } = useSession();
 
   useEffect(() => {
-    checkToken();
-  }, []);
+    if( status === 'authenticated') {
+      console.log({user: data?.user})
+      // dispath({ type: '[Auth] - login', paylod: data?.user as IUser})
+    }
+  }, [status, data])
+  
+  // useEffect(() => {
+  //   checkToken();
+  // }, []);
 
   const checkToken = async() => {
     // lamar al endpoin
