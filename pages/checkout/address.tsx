@@ -1,5 +1,5 @@
+import { useContext, useState, useEffect } from "react";
 import { GetServerSideProps } from "next";
-import { useContext } from "react";
 import { useRouter } from "next/router";
 import { countries, jwt } from "utils";
 import { ShopLayouts } from "components/layouts";
@@ -14,7 +14,7 @@ import {
 import { Box } from "@mui/system";
 import { useForm } from "react-hook-form";
 import Cookies from "js-cookie";
-import { CartContext } from '../../context';
+import { CartContext } from "../../context";
 
 type FormData = {
   firstName: string;
@@ -41,6 +41,7 @@ const getAddressFromCookies = (): FormData => {
 };
 
 const AddressPage = () => {
+  const [country, setCountry] = useState();
   const router = useRouter();
   const { updateAddress } = useContext(CartContext);
   const {
@@ -52,13 +53,18 @@ const AddressPage = () => {
   });
 
   const onLoginAddress = (data: FormData) => {
-    updateAddress( data );
+    updateAddress(data);
     router.push("/checkout/summary");
-
   };
 
+  const validateCountry = Cookies.get("country") || "";
+  useEffect(() => setCountry(validateCountry), []);
+  console.log(country)
   return (
-    <ShopLayouts title={""} pageDescription={""}>
+    <ShopLayouts
+      title={"Dirección"}
+      pageDescription={"Confirmar dirección del destino"}
+    >
       <Typography variant="h1" component="h1">
         Dirección
       </Typography>
@@ -142,6 +148,7 @@ const AddressPage = () => {
           <Grid item xs={12} sm={6}>
             <FormControl fullWidth>
               <TextField
+                key={Cookies.get("country") || countries[0].code}
                 select
                 variant="filled"
                 label="Pais"
@@ -150,7 +157,8 @@ const AddressPage = () => {
                 })}
                 error={!!errors.country}
                 // helperText={errors.country?.message}
-                defaultValue={countries[0].code}
+                defaultValue={Cookies.get("country") || countries[0].code}
+                // defaultValue={country}
               >
                 {countries.map((country) => (
                   <MenuItem value={country.code} key={country.code}>

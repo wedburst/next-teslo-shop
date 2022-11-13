@@ -59,9 +59,8 @@ export const CartProvider: FC = ({ children }: any) => {
   }, []);
 
   useEffect(() => {
-
     if (Cookie.get("firstName")) {
-      const cookiesAddress = {
+      const shippingAddress = {
         firstName: Cookie.get("firstName") || "",
         lastName: Cookie.get("lastName") || "",
         address: Cookie.get("address") || "",
@@ -71,10 +70,9 @@ export const CartProvider: FC = ({ children }: any) => {
         country: Cookie.get("country") || "",
         phone: Cookie.get("phone") || "",
       }
-  
       dispatch({
-        type: "[Cart] - LoadAdrees from cookies",
-        payload: cookiesAddress,
+        type: "[Cart] - LoadAddrees from cookies",
+        payload: shippingAddress,
       });
     }
  
@@ -165,8 +163,8 @@ export const CartProvider: FC = ({ children }: any) => {
     Cookie.set("city", address.city);
     Cookie.set("country", address.country);
     Cookie.set("phone", address.phone);
+    dispatch({ type: '[Cart] - Update address', payload: address })
 
-    dispatch({ type: '[Cart] - Update address', payload: address})
   }
 
   return (
