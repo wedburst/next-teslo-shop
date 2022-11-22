@@ -25,7 +25,7 @@ export const AuthProvider: FC = ({ children }: any) => {
   useEffect(() => {
     if( status === 'authenticated') {
       console.log({user: data?.user})
-      // dispath({ type: '[Auth] - login', paylod: data?.user as IUser})
+      dispath({ type: '[Auth] - login', paylod: data?.user as IUser})
     }
   }, [status, data])
   
@@ -102,7 +102,6 @@ export const AuthProvider: FC = ({ children }: any) => {
   };
 
   const logout = () => {
-    Cookies.remove('token')
     Cookies.remove('cart')
     Cookies.remove("firstName")
     Cookies.remove("lastName")
@@ -112,7 +111,10 @@ export const AuthProvider: FC = ({ children }: any) => {
     Cookies.remove("city")
     Cookies.remove("country")
     Cookies.remove("phone")
-    router.reload();
+
+    signOut()
+    // Cookies.remove('token')
+    // router.reload();
   }
 
   return (
