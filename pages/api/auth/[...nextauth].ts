@@ -37,9 +37,21 @@ export const authOptions = {
     }),
   ],
 
+  // Custom Pages
+  pages: {
+    signIn: '/auth/login',
+    newUser: '/auth/register'
+  },
+
   // Callbacks
   jwt: {
    
+  },
+
+  session: {
+    maxAge: 2592000, // 30d
+    strategy: 'jwt',
+    updateAge: 86499 // cada día
   },
 
   callbacks: {

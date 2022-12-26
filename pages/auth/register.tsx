@@ -1,4 +1,6 @@
 import { useContext, useState } from "react";
+import { GetServerSideProps } from "next";
+
 import NextLink from "next/link";
 import { useRouter } from "next/router";
 import {
@@ -16,6 +18,7 @@ import { CheckCircleOutline, ErrorOutline } from "@mui/icons-material";
 import { validations } from "utils";
 import tesloApi from "../../api/tesloApi";
 import { AuthContext } from "context";
+import { getSession, signIn } from "next-auth/react";
 
 type FormData = {
   name: string;
@@ -55,10 +58,10 @@ const registerPage = () => {
     setShowSucces(true);
     setTimeout(() => setShowSucces(false), 3000);
 
+    await signIn('credentials', {email, password});
 
-    const destination = router.query.p?.toString() || '/'
-
-    router.replace(destination);
+    // const destination = router.query.p?.toString() || '/'
+    // router.replace(destination);
 
     // try {
     //   const { data } = await tesloApi.post("/user/register", {
@@ -175,5 +178,26 @@ const registerPage = () => {
     </AuthLayout>
   );
 };
+
+export const getServerSideProps: GetServerSideProps = async ({req, query}) => {
+
+  const session = await getSession({req})
+  const { p = '/' } = query;
+
+  if ( session ) {
+    return {
+      redirect: {
+        destination: p.toString(),
+        permanent: false
+      }
+    }
+  }
+
+  return {
+    props: {
+      
+    }
+  }
+}
 
 export default registerPage;
