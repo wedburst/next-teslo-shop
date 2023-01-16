@@ -1,36 +1,34 @@
-import { NextFetchEvent, NextRequest, NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import { getToken } from 'next-auth/jwt';
 // import { jwt } from 'utils';
 
 
-export async function middleware( req: NextRequest, ev: NextFetchEvent ) {
-
-    const session = await getToken({req, secret: process.env.NEXTAUTH_SECRET});
-
-    console.log({ session })
-
-    if( !session ){
-        const requestedPage = req.page.name;
-        return NextResponse.redirect(`/auth/login?p=${ requestedPage }`);
-    }
-
-    return NextResponse.next();
-
-    // const { token = '' } = req.cookies;
-
-    // // return new Response('No autorizado', {
-    // //     status: 401
-    // // });
-
-    // try {
-    //     await jwt.isValidToken( token );
-    //     return NextResponse.next();
-
-    // } catch (error) {
-        
-    //     // return Response.redirect('/auth/login');
-    //     const requestedPage = req.page.name;
-    //     return NextResponse.redirect(`/auth/login?p=${ requestedPage }`);
+export async function middleware(req: NextRequest) {
+    // if (request.nextUrl.pathname.startsWith('/checkout')) {
+    //     try {
+    //         await jose.jwtVerify(
+    //             request.cookies.get('token') as string,
+    //             new TextEncoder().encode(process.env.JWT_SECRET_SEED)
+    //         );
+    //
+    //         return NextResponse.next();
+    //     } catch (err) {
+    //         const { protocol, host, pathname } = request.nexturl;
+    //         return NextResponse.redirect(`${protocol}//${host}/auth/login?p=${pathname}`);
+    //     }
     // }
-
+ 
+    const session = await getToken({ req });
+ 
+    if (!session) {
+        const { protocol, host, pathname } = req.nextUrl;
+        return NextResponse.redirect(`${protocol}//${host}/auth/login?p=${pathname}`);
+    }
+ 
+    return NextResponse.next();
 }
+ 
+// Only the paths declared in here will run the middleware
+export const config = {
+    matcher: ['/checkout/:path*']
+};
